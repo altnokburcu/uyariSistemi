@@ -27,9 +27,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
-/**
- *
- * @author Burcu
+/*
+  @author Burcu
  */
 public class UI_uyari extends javax.swing.JFrame implements SerialPortEventListener{
 
@@ -70,8 +69,8 @@ public class UI_uyari extends javax.swing.JFrame implements SerialPortEventListe
         }
         if (portId == null) {
             
-            JOptionPane.showMessageDialog(null," PORTUNA BAĞLI CİHAZ YOK!","HATA",JOptionPane.ERROR_MESSAGE);
-            System.out.println("PORTA BAĞLI CİHAZ YOK!");
+            JOptionPane.showMessageDialog(null," Portuna bağlı cihaz yok!","Hata",JOptionPane.ERROR_MESSAGE);
+            System.out.println("Porta bağlı cihaz yok!");
             return;
         }
 System.out.println(portId);
@@ -87,7 +86,6 @@ System.out.println(portId);
             serialPort.addEventListener((SerialPortEventListener) this);
            serialPort.notifyOnDataAvailable(true);
         } catch (Exception e) {
-            System.out.println("TURGAY");
             System.err.println(e.toString());
         }
     }
@@ -329,14 +327,14 @@ System.out.println(portId);
   
         initialize();
  
-        txtReadData.setText(txtComPortName.getText()+" PORT AÇILDI\n");
+        txtReadData.setText(txtComPortName.getText()+" Port açıldı\n");
         txtReadData.setText(txtReadData.getText() + "Veri Bekleniyor...\n");
         model.clear();
     }//GEN-LAST:event_btnConnectActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
            close();
-        txtReadData.setText(txtReadData.getText() + "KAPATILDI\n");
+        txtReadData.setText(txtReadData.getText() + "Kapatıldı\n");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtBoundRateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBoundRateActionPerformed
