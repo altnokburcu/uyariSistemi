@@ -22,7 +22,6 @@ void setup() {
  
 }
 void loop() {
-  Serial.write("deneme\n");
   delay(1000);
   if(Serial.available()>0){ // Haberleşme kullanılabilir durumda ise
     gelen=Serial.read(); // Java kodundan geleni oku
@@ -42,19 +41,22 @@ void loop() {
    // Gas sensor analog pin A2
   analog_deger = analogRead(pin_gas_b);
   // Serial monitor
-  Serial.print("Pin Gas A : ");
-  Serial.print(dijital_deger);
-  Serial.print(" Pin Gas B : ");
-  Serial.println(analog_deger);
+  if(dijital_deger != 0){
+     Serial.print("Gaz Algılanıyor :");
+     Serial.println(analog_deger);
+  }
+  else if(dijital_deger == 0){
+    Serial.print("Gaz Algılanmıyor");
+  }
+ //   Serial.print(dijital_deger);
+ //   Serial.print(" Pin Gas B : ");
+ //   Serial.println(analog_deger);
   if (analog_deger > gas_sensor)
   {
-
     digitalWrite(buzzerPin, HIGH);
-
   }
   else
   {
-   
     digitalWrite(buzzerPin, LOW);
   }
   delay(100);
@@ -63,9 +65,19 @@ void loop() {
   olculendeger = (olculendeger/1023)*5000;//değeri mV'a dönüştürecek 
   sicaklik = olculendeger /10,0; // mV'u sicakliğa dönüştürecek
   gonderilecekSicaklik = (int)sicaklik;
-  delay(100); 
-  Serial.print("Sıcaklık:");
-  Serial.println(sicaklik);
+   if (sicaklik > 70)
+  {
+    Serial.print("Duman sensörü devre dışı, Oda Sıcaklık :");
+    Serial.println(sicaklik);
+    digitalWrite(buzzerPin, HIGH);
+  }
+  else
+  {
+    Serial.print("Oda Sıcaklığı :");
+    Serial.println(sicaklik);
+    digitalWrite(buzzerPin, LOW);
+  }
+  delay(1000); 
 }
 
 
