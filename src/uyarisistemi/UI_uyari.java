@@ -17,6 +17,7 @@ import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
 import java.awt.Component;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -40,7 +41,7 @@ public class UI_uyari extends javax.swing.JFrame implements SerialPortEventListe
     String[] readArray = new String[100];
     SerialPort serialPort;
     int i = 0;
-    private static String comPortName = "COM14";//BU BİLGİYİ FORM DAN DA ALABİLİRİZ
+    private static String comPortName = "COM5";//BU BİLGİYİ FORM DAN DA ALABİLİRİZ
 
     public static String getComPortName() {
         return comPortName;
@@ -97,7 +98,8 @@ System.out.println(portId);
         }
     }
     DefaultListModel model = new DefaultListModel();
-    
+    String sicaklik,gaz;
+    int sira=0;
     @Override
     public synchronized void serialEvent(SerialPortEvent oEvent) {
 
@@ -110,7 +112,23 @@ System.out.println(portId);
                     inputLine = input.readLine();
                     Object node = inputLine;
                     model.addElement(node);
-                  
+                    if(inputLine.contains("Sıcaklık:")){
+                        String[] cekilen={};
+                        cekilen=inputLine.split(" ");
+                        this.sicaklik=cekilen[1];
+                        this.sira++;
+                    }
+                    if(inputLine.contains("Gas_A")){
+                        String[] cekilen={};
+                        cekilen=inputLine.split(" ");
+                        this.gaz=cekilen[7];
+                        this.sira++;
+                    }
+                    if(sira==2){
+                        dbConnection db = new dbConnection();
+                        db.vt_gelen_kaydet( this.gaz,this.sicaklik);
+                        this.sira=0;
+                    }
                     System.out.println(inputLine);
                   
                 } else {
@@ -160,6 +178,11 @@ System.out.println(portId);
         jLabel5 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        vt_sensor = new javax.swing.JButton();
+        vt_gonderilen = new javax.swing.JButton();
+        led_yak = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -256,6 +279,42 @@ System.out.println(portId);
         jList1.setModel(model);
         jScrollPane3.setViewportView(jList1);
 
+        vt_sensor.setText("VT Sensör Verileri Listele");
+        vt_sensor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vt_sensorActionPerformed(evt);
+            }
+        });
+
+        vt_gonderilen.setText("VT Gönderilen Verileri Listele");
+        vt_gonderilen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vt_gonderilenActionPerformed(evt);
+            }
+        });
+
+        led_yak.setText("Led Yak");
+        led_yak.setActionCommand("Led Yak");
+        led_yak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                led_yakActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Ses Çıkar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("İşlemleri Durdur");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -264,14 +323,23 @@ System.out.println(portId);
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                             .addComponent(btnConnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
                             .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(vt_sensor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(vt_gonderilen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(led_yak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -279,7 +347,7 @@ System.out.println(portId);
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                             .addComponent(jScrollPane2))
                         .addGap(26, 26, 26))
                     .addGroup(layout.createSequentialGroup()
@@ -302,13 +370,24 @@ System.out.println(portId);
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
+                        .addComponent(vt_sensor)
+                        .addGap(18, 18, 18)
+                        .addComponent(vt_gonderilen)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(led_yak)
+                            .addComponent(jButton4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -344,6 +423,52 @@ System.out.println(portId);
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         PortListele();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void vt_gonderilenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vt_gonderilenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_vt_gonderilenActionPerformed
+
+    private void vt_sensorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vt_sensorActionPerformed
+       
+ 
+        try {
+            new vt_sensor_listele().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_uyari.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+    }//GEN-LAST:event_vt_sensorActionPerformed
+
+    private void led_yakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_led_yakActionPerformed
+        // TODO add your handling code here:
+            String serialMessage = "A";
+        try {
+            output.write(serialMessage.getBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(UI_uyari.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_led_yakActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        String serialMessage = "B";
+        try {
+            output.write(serialMessage.getBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(UI_uyari.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String serialMessage = "C";
+        try {
+            output.write(serialMessage.getBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(UI_uyari.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,6 +509,8 @@ System.out.println(portId);
     private javax.swing.JButton btnConnect;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -394,10 +521,13 @@ System.out.println(portId);
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton led_yak;
     private javax.swing.JTextField txtBoundRate;
     private javax.swing.JTextField txtComPortName;
     private javax.swing.JTextArea txtReadData;
     private javax.swing.JTextField txtTimeOut;
+    private javax.swing.JButton vt_gonderilen;
+    private javax.swing.JButton vt_sensor;
     // End of variables declaration//GEN-END:variables
 
 }

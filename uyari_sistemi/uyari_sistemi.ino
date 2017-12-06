@@ -1,4 +1,4 @@
-int led = 13; //Led pin tanımlanıyor. En kullanılabilir led piniymiş GND ye yakın olmasından galiba :D
+int led = 8; //Led pin tanımlanıyor. En kullanılabilir led piniymiş GND ye yakın olmasından galiba :D
 int gelen;
 int dijital_deger, analog_deger, gonderilecekSicaklik;
 int buzzerPin=2; // Buzzer'in + bacağının bnağlı olduğu pin
@@ -7,11 +7,11 @@ int buzzerPin=2; // Buzzer'in + bacağının bnağlı olduğu pin
 int pin_gas_a = 7; // Gas sensor arduino dijital pin 7
 int pin_gas_b = A2; // Gas sensor arduino analog pin A2
 
-int gas_sensor = 220; // Sensor degeri serial monitorden okuyup istediğiniz degeri verebilirsiniz
+int gas_sensor = 300; // Sensor degeri serial monitorden okuyup istediğiniz degeri verebilirsiniz
 float olculendeger;
 int lm35Pin = A1;
 float sicaklik;
-
+int buzzerDurum=0;
 void setup() {                
   pinMode(led, OUTPUT);   
   Serial.begin(9600); // 9600 Baud ile haberleşmeye başla
@@ -22,16 +22,24 @@ void setup() {
  
 }
 void loop() {
+ // Serial.write("deneme\n");
   delay(1000);
   if(Serial.available()>0){ // Haberleşme kullanılabilir durumda ise
     gelen=Serial.read(); // Java kodundan geleni oku
-    if(gelen==1){ 
+    if(gelen==65){ 
       digitalWrite(led, HIGH);  // 1 ise yak
-      digitalWrite(buzzerPin, HIGH);
+      digitalWrite(buzzerPin, LOW);
+      buzzerDurum = 0;
     }
-    if(gelen==0){
-      digitalWrite(led, LOW);  // 0 ise söndür
+    if(gelen==66){ 
+      digitalWrite(led, LOW);  // 1 ise yak
       digitalWrite(buzzerPin, HIGH);
+      buzzerDurum = 1;
+    }
+    if(gelen==67){
+      digitalWrite(led, LOW);  // 0 ise söndür
+      digitalWrite(buzzerPin, LOW);
+      buzzerDurum = 0;
     }
     Serial.write(gelen);
     Serial.write(dijital_deger);
@@ -41,43 +49,41 @@ void loop() {
    // Gas sensor analog pin A2
   analog_deger = analogRead(pin_gas_b);
   // Serial monitor
-  if(dijital_deger != 0){
-     Serial.print("Gaz Algılanıyor :");
-     Serial.println(analog_deger);
-  }
-  else if(dijital_deger == 0){
-    Serial.print("Gaz Algılanmıyor");
-  }
- //   Serial.print(dijital_deger);
- //   Serial.print(" Pin Gas B : ");
- //   Serial.println(analog_deger);
+  Serial.print("Pin Gas_A : ");
+  Serial.print(dijital_deger);
+  Serial.print(" Pin Gas_B : ");
+  Serial.println(analog_deger);
   if (analog_deger > gas_sensor)
   {
+
     digitalWrite(buzzerPin, HIGH);
+
   }
   else
   {
-    digitalWrite(buzzerPin, LOW);
+    if(buzzerDurum != 1){
+      digitalWrite(buzzerPin, LOW);
+    }
+    
   }
   delay(100);
   
-  olculendeger = analogRead(lm35Pin); 
+/* olculendeger = analogRead(lm35Pin); 
   olculendeger = (olculendeger/1023)*5000;//değeri mV'a dönüştürecek 
   sicaklik = olculendeger /10,0; // mV'u sicakliğa dönüştürecek
-  gonderilecekSicaklik = (int)sicaklik;
-   if (sicaklik > 70)
-  {
-    Serial.print("Duman sensörü devre dışı, Oda Sıcaklık :");
-    Serial.println(sicaklik);
-    digitalWrite(buzzerPin, HIGH);
-  }
-  else
-  {
-    Serial.print("Oda Sıcaklığı :");
-    Serial.println(sicaklik);
-    digitalWrite(buzzerPin, LOW);
-  }
-  delay(1000); 
+  gonderilecekSicaklik = (int)sicaklik; 
+  delay(100); 
+  Serial.print("Sıcaklık:");
+  Serial.println(sicaklik);
+
+  float sic=analogRead(lm35Pin);
+  sic = sic*0.48820125;
+  Serial.println(sic);
+*/
+  int sicaklikVolt = analogRead(lm35Pin);
+  float sicaklikC = sicaklikC = sicaklikVolt / 9.31; 
+  Serial.print("Sıcaklık: ");
+  Serial.println(sicaklikC);
 }
 
 
