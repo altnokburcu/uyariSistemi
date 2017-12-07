@@ -57,12 +57,12 @@ public class UI_uyari extends javax.swing.JFrame implements SerialPortEventListe
         System.setProperty("gnu.io.rxtx.SerialPorts", getComPortName());        
         CommPortIdentifier portId = null;        
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
-
+        
         while (portEnum.hasMoreElements()) {
             CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-            for (String portName : PORT_NAMES) {
-                if (currPortId.getName().equals(portName)) {
-                    System.out.println(portName);
+            if(currPortId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+                if (currPortId.getName().equals(txtComPortName.getText())) {
+                    System.out.println(txtComPortName.getText());
                     portId = currPortId;
                     break;
                 }
@@ -147,12 +147,15 @@ System.out.println(portId);
 
    void PortListele(){
     jComboBox1.removeAllItems();        
-        System.setProperty("gnu.io.rxtx.SerialPorts", getComPortName());  
+    System.out.println("deneme");
+        //System.setProperty("gnu.io.rxtx.SerialPorts", getComPortName());  
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
         while (portEnum.hasMoreElements()) {
+             System.out.println("Has more elements");
             CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-            for (String portName : PORT_NAMES) {
-                jComboBox1.addItem(portName);
+            if (currPortId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+                 System.out.println(currPortId.getName());
+                jComboBox1.addItem(currPortId.getName());
             }
         }
     }
@@ -212,6 +215,11 @@ System.out.println(portId);
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jPanel1.setToolTipText("");
 
@@ -294,7 +302,6 @@ System.out.println(portId);
         });
 
         led_yak.setText("Led Yak");
-        led_yak.setActionCommand("Led Yak");
         led_yak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 led_yakActionPerformed(evt);
@@ -328,7 +335,7 @@ System.out.println(portId);
                             .addComponent(btnConnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, Short.MAX_VALUE)
                             .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(vt_sensor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(vt_gonderilen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -387,7 +394,7 @@ System.out.println(portId);
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane3)))
                 .addContainerGap())
         );
 
@@ -469,6 +476,12 @@ System.out.println(portId);
             Logger.getLogger(UI_uyari.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        txtComPortName.setText((String) jComboBox1.getSelectedItem());
+        setComPortName((String) jComboBox1.getSelectedItem());
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
