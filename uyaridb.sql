@@ -517,17 +517,26 @@ INSERT INTO `gelen_sensor` (`id`,`gelen_gaz`,`gelen_sicaklik`) VALUES
 
 DROP TABLE IF EXISTS `giden_sensor`;
 CREATE TABLE `giden_sensor` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `giden_led` tinyint(1) DEFAULT NULL,
   `giden_buzzer` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `giden_sensor`
 --
 
 /*!40000 ALTER TABLE `giden_sensor` DISABLE KEYS */;
+INSERT INTO `giden_sensor` (`id`,`giden_led`,`giden_buzzer`) VALUES 
+ (1,1,0),
+ (2,1,0),
+ (3,0,1),
+ (4,1,0),
+ (5,0,1),
+ (6,0,0),
+ (7,0,1),
+ (8,0,0);
 /*!40000 ALTER TABLE `giden_sensor` ENABLE KEYS */;
 
 
