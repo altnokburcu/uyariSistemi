@@ -5,6 +5,7 @@
  */
 package uyarisistemi;
 
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -26,6 +27,7 @@ public class giris_uyari extends javax.swing.JFrame {
      */
     public giris_uyari() {
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cat.png")));
     }
 
     /**
@@ -41,10 +43,11 @@ public class giris_uyari extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         giris = new javax.swing.JButton();
         k_adi = new javax.swing.JTextField();
-        parola = new javax.swing.JTextField();
         iptal = new javax.swing.JButton();
+        parola = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Kullanıcı Girişi");
 
         jLabel1.setText("Kullanıcı Adı:");
 
@@ -64,6 +67,17 @@ public class giris_uyari extends javax.swing.JFrame {
         });
 
         iptal.setText("İptal");
+        iptal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iptalActionPerformed(evt);
+            }
+        });
+
+        parola.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                parolaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -76,28 +90,28 @@ public class giris_uyari extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(iptal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(giris, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                    .addComponent(parola)
                     .addComponent(k_adi)
-                    .addComponent(iptal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(parola))
                 .addGap(80, 80, 80))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(63, 63, 63)
+                .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(k_adi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(k_adi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(parola, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(giris)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(iptal)
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
 
         pack();
@@ -123,6 +137,14 @@ public class giris_uyari extends javax.swing.JFrame {
     private void k_adiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_k_adiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_k_adiActionPerformed
+
+    private void iptalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iptalActionPerformed
+        System.exit(1);
+    }//GEN-LAST:event_iptalActionPerformed
+
+    private void parolaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parolaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_parolaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,6 +187,6 @@ public class giris_uyari extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField k_adi;
-    private javax.swing.JTextField parola;
+    private javax.swing.JPasswordField parola;
     // End of variables declaration//GEN-END:variables
 }

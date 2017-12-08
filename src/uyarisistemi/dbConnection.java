@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import uyarisistemi.model.sensor;
+import uyarisistemi.model.veri;
 
 
 /**
@@ -23,7 +24,7 @@ import uyarisistemi.model.sensor;
  * @author Burcu
  */
 public class dbConnection {
-    Connection connection;
+    public Connection connection;
     public void baglan() throws SQLException{
         String url = "jdbc:mysql://localhost:3306/uyariDB";
         String username = "root";
@@ -75,6 +76,45 @@ public class dbConnection {
                 veriler = new sensor();
                 veriler.setSicaklik(rs.getString("gelen_sicaklik"));
                 veriler.setGaz(rs.getString("gelen_gaz"));
+                
+                    gelen.add(veriler);
+                
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(dbConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return gelen;
+    }
+        public void vt_giden_kaydet(String led,String buz) throws SQLException{
+        baglan();
+      
+          PreparedStatement ps = connection.prepareStatement("insert into giden_sensor(giden_led, giden_buzzer ) values(?,?)");
+            ps.setString(1, led);
+            ps.setString(2, buz);
+            ps.executeUpdate();
+        
+        
+    }
+    
+      public List<veri> veri_listele() throws SQLException{
+        baglan();
+        List<veri> gelen = new ArrayList<>();
+     
+        veri veriler ;
+        Statement stmt;
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs;
+            rs = stmt.executeQuery("SELECT * FROM giden_sensor");
+           
+            while (rs.next()) {
+                System.out.println(rs.getString("giden_led"));
+                System.out.println(rs.getString("giden_buzzer"));
+                veriler = new veri();
+                veriler.setLed(rs.getString("giden_led"));
+                veriler.setBuzzer(rs.getString("giden_buzzer"));
                 
                     gelen.add(veriler);
                 

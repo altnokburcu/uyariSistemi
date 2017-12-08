@@ -5,44 +5,42 @@
  */
 package uyarisistemi;
 
-import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JScrollPane;
-import javax.swing.table.TableModel;
 import uyarisistemi.model.sensor;
+import uyarisistemi.model.veri;
 
 /**
  *
  * @author Burcu
  */
-public class vt_sensor_listele extends javax.swing.JFrame {
-
-    private boolean sensor;
-
+public class vt_verileri_listele extends javax.swing.JFrame {
+    
     /**
-     * Creates new form vt_sensor_listele
+     * Creates new form vt_verileri_listele
+     * @throws java.sql.SQLException
      */
-    public void veriListele() throws SQLException{
+     public void gidenveriListele() throws SQLException{
+         jTextArea1.setText("");
         dbConnection db=new dbConnection();
-        List<sensor> ls = new ArrayList<>();
-        ls = db.sensor_listele();
+        List<veri> ls = new ArrayList<>();
+        ls = db.veri_listele();
         String birlestir = null;
         for(int i=0;i<ls.size();i++){
-            birlestir += "Sıcaklık: " + ls.get(i).getSicaklik() + " " + "Gaz: " +ls.get(i).getGaz() + "\n";
+            birlestir += "Led: " + ls.get(i).getLed() + " " + "Buzzer: " +ls.get(i).getBuzzer() + "\n";
         }
         jTextArea1.setText(birlestir);
    
         
     }
-    public vt_sensor_listele() throws SQLException {
+    public vt_verileri_listele() throws SQLException {
         initComponents();
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cat.png")));
-        veriListele();
+        setImage();
+        gidenveriListele();
     }
 
     /**
@@ -54,14 +52,14 @@ public class vt_sensor_listele extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ta = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
-        setTitle("Sensörden Okunan Değerler");
+        setTitle("Led ve Buzzer Kontrolü");
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        ta.setViewportView(jTextArea1);
+        jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,14 +67,14 @@ public class vt_sensor_listele extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ta, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ta, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -100,35 +98,34 @@ public class vt_sensor_listele extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(vt_sensor_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vt_verileri_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(vt_sensor_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vt_verileri_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(vt_sensor_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vt_verileri_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(vt_sensor_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(vt_verileri_listele.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
                 try {
-                    /*    JScrollPane scrollPane = new JScrollPane(tb);
-                    new vt_sensor_listele().add(scrollPane, BorderLayout.CENTER);
-                    new vt_sensor_listele().setSize(300, 150); */
-                    new vt_sensor_listele().setVisible(true);
+                    new vt_verileri_listele().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(vt_sensor_listele.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(vt_verileri_listele.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JScrollPane ta;
     // End of variables declaration//GEN-END:variables
+
+    private void setImage() {
+      setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("cat.png")));
+    }
 }
